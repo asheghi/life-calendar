@@ -175,10 +175,9 @@
             const birthday = moment(`${date.year}-${date.month}-${date.day}`, 'YYYY-M-D');
             const weeks = today.diff(birthday, 'weeks');
 
+            let path = `${location.pathname.replaceAll('index.html', '')}`;
+            const url = `${location.protocol}//${location.host}${path}weeks?weeks=${weeks}`;
 
-            const url = `${location.protocol}//${location.host}/weeks.html?weeks=${weeks}`
-
-            console.log('check', url);
             location.href = url;
         });
     }
