@@ -174,9 +174,6 @@
             const today = moment();
             const birthday = moment(`${date.year}-${date.month}-${date.day}`, 'YYYY-M-D');
             const weeks = today.diff(birthday, 'weeks');
-            console.log('today', today.format());
-            console.log('borthdate', birthday.format());
-            console.log('week', weeks);
 
 
             const url = `${location.protocol}//${location.host}/weeks.html?weeks=${weeks}`
