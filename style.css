@@ -1,0 +1,100 @@
+*,*::after,*::before{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+body{
+
+}
+
+
+.container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin:0 auto;
+}
+
+.header{
+    text-align: center;
+    text-transform: uppercase;
+    padding: 1rem 0;
+    font-family: "San Francisco Display";
+    letter-spacing: 18px;
+    font-weight: 700;
+    font-size: 4rem;
+    margin-bottom: 20px;
+
+}
+
+.footer{
+    text-align: center;
+    font-family: "San Francisco Text";
+    font-size: 18px;
+    padding: 2rem 0;
+    text-transform: uppercase;
+}
+
+.plot{
+
+}
+
+.row{
+    position: relative;
+    display: flex;
+    justify-content: center;
+
+}
+
+.row .year{
+    position: absolute;
+    left: -16px;
+    display: none;
+    font-family: Ubuntu;
+}
+
+.row:nth-child(10n + 12){
+    margin-top: 4px;
+}
+
+.row:nth-child(5n+1) .year{
+    display: block;
+}
+.row:first-child .year{
+    display: none;
+}
+
+.tenth{
+    display: flex;
+    margin: 0 2px;
+}
+
+.week{
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(0,0,0,.3);
+    margin: 3px;
+    border-radius: 3px;
+
+    position: relative;
+}
+
+.w{
+    position: absolute;
+    top: -26px;
+    left: -5px;
+    font-size: 16px;
+    font-family: Ubuntu;
+}
+
+
+.w,.year{
+    opacity: .4;
+}
+
+.passed{
+    background: rgba(0,0,0,.7);
+}

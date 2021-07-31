@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Life in Weeks</title>
+    <style>
+        *, *::before, *::after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .center-box {
+            margin-top: -4rem;
+        }
+
+        .head {
+            margin-bottom: 6rem;
+        }
+
+        .sub-head {
+            margin-bottom: 1rem;
+        }
+
+        .birthdate-inputs {
+            display: flex;
+        }
+
+        .birthdate-inputs div {
+            padding-right: 1rem;
+        }
+
+        select {
+            width: 100px;
+            padding: .24rem;
+            border-radius: .25rem;
+        }
+
+        .div-btn {
+            min-width: 140px;
+        }
+
+        .btn {
+            background: green;
+            color: white;
+            padding: .4rem 2rem;
+            border-radius: .25rem;
+            border: 0;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="center-box">
+        <h1 class="head">Life Calendar in Weeks</h1>
+        <h3 class="sub-head">Enter your birthdate</h3>
+        <div class="birthdate-inputs">
+            <div>
+                <label for="input_year">Year:</label>
+                <select   id="input_year" autocomplete="off">
+                    <option value="">Select</option>
+                </select>
+            </div>
+            <div>
+                <label for="input_month">Month:</label>
+                <select  id="input_month" autocomplete="off">
+                    <option value="">Select</option>
+                </select>
+            </div>
+            <div>
+                <label for="input_day">Day:</label>
+                <select  id="input_day" autocomplete="off">
+                    <option value="">Select</option>
+                </select>
+            </div>
+
+            <div class="div-btn text-right">
+                <button id="btn" class="btn">Let's Go</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+            integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</div>
+
+<!--    <script>-->
+<!--        var app = new Vue({-->
+<!--            el: '#app',-->
+<!--            data: {-->
+<!--                year:null,-->
+<!--                month:null,-->
+<!--                day:null,-->
+<!--            }-->
+<!--        })-->
+<!--    </script>-->
+<script>
+
+    const input_year = document.getElementById('input_year');
+    const input_month = document.getElementById('input_month');
+    const input_day = document.getElementById('input_day');
+
+    input_year.value = null;
+    input_month.value = null;
+    input_day.value = null;
+
+    const date = {
+        year: input_year.value,
+        month: input_month.value,
+        date: input_day.value,
+    }
+
+    const btn = document.getElementById('btn');
+
+    setListeners();
+
+    function fillOptions() {
+        const currentYear = new Date().getFullYear();
+        for (let i = 0; i < 101; i++) {
+            const option = document.createElement('option');
+            let val = String(currentYear - i);
+            option.innerHTML = val;
+            option.setAttribute('value', val);
+            input_year.appendChild(option);
+        }
+
+        for (let i = 1; i < 13; i++) {
+            const option = document.createElement('option');
+            let val = String(i);
+            option.innerHTML = val;
+            option.setAttribute('value', val);
+            input_month.appendChild(option);
+        }
+        for (let i = 1; i < 32; i++) {
+            const option = document.createElement('option');
+            let val = String(i);
+            option.innerHTML = val;
+            option.setAttribute('value', val);
+            input_day.appendChild(option);
+        }
+    }
+
+    fillOptions()
+
+    function updateBtnVisibility() {
+        let isValid = date.year && date.month && date.day;
+        btn.style.display = isValid ? 'block' : 'none';
+    }
+
+    function getListener(field) {
+        return function (e) {
+            let val = e.target.value;
+            if (!isNaN(val)) {
+                date[field] = parseInt(val);
+            }
+            updateBtnVisibility()
+        }
+    }
+
+    function setListeners() {
+        input_year.onchange = getListener('year');
+        input_month.onchange = getListener('month');
+        input_day.onchange = getListener('day');
+
+        btn.addEventListener('click', function () {
+            const today = moment();
+            const birthday = moment(`${date.year}-${date.month}-${date.day}`, 'YYYY-M-D');
+            const weeks = today.diff(birthday, 'weeks');
+            console.log('today', today.format());
+            console.log('borthdate', birthday.format());
+            console.log('week', weeks);
+
+
+            const url = `${location.protocol}//${location.host}/weeks.html?weeks=${weeks}`
+
+            console.log('check', url);
+            location.href = url;
+        });
+    }
+
+    updateBtnVisibility();
+</script>
+</body>
+</html>
