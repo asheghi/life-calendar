@@ -13,3 +13,8 @@ Life Calendar visualizes your life in weeks which helps your stop procrastinatio
 - birthdate is persisted in url
 - url can be bookmarked
 - birthdate can be changed
+
+##### Todos
+
+- [ ] add support for mobile
+- [ ] refactor script
