@@ -1,188 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Life in Weeks</title>
-    <style>
-        *, *::before, *::after {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-size: 24px;
-        }
-
-        .center-box {
-            margin-top: -4em;
-        }
-
-        .head {
-            margin-bottom: 6em;
-        }
-
-        .sub-head {
-            margin-bottom: 1em;
-        }
-
-        .birthdate-inputs {
-            display: flex;
-            align-items: center;
-        }
-
-        .birthdate-inputs div {
-            padding-right: 1em;
-        }
-
-        select {
-            width: 100px;
-            padding: .24em;
-            border-radius: .25em;
-        }
-
-        .div-btn {
-            min-width: 220px;
-            align-self: center;
-        }
-
-        .btn {
-            background: green;
-            color: white;
-            padding: .4em 2em;
-            border-radius: .25em;
-            border: 0;
-        }
-
-        .text-right {
-            text-align: right;
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-<div id="app">
-    <div class="center-box">
-        <h1 class="head">Life Calendar in Weeks</h1>
-        <h3 class="sub-head">Enter your birthdate</h3>
-        <div class="birthdate-inputs">
-            <div>
-                <label for="input_year">Year:</label>
-                <select id="input_year" autocomplete="off">
-                    <option value="">Select</option>
-                </select>
-            </div>
-            <div>
-                <label for="input_month">Month:</label>
-                <select id="input_month" autocomplete="off">
-                    <option value="">Select</option>
-                </select>
-            </div>
-            <div>
-                <label for="input_day">Day:</label>
-                <select id="input_day" autocomplete="off">
-                    <option value="">Select</option>
-                </select>
-            </div>
-
-            <div class="div-btn text-right">
-                <button id="btn" class="btn">Let's Go</button>
-            </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Life Calendar</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+      integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">my life in weeks</div>
+      <div class="plot"></div>
+      <div class="footer">
+        one life only
+        <div class="birthdate">
+          <p>birthdate: <span class="birthdate-value"></span></p>
+          <button class="btn-change-bd">change</button>
         </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
-            integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-</div>
+      </div>
 
-<script>
+      <div class="date-picker-modal hidden test">
+        <div class="modal">
+          <h2 class="modal-head">Enter your birthdate</h2>
+          <div class="date-row">
+            <input type="date" />
+            <button>Set</button>
+          </div>
+          <button class="btn-cancel">cancel</button>
+        </div>
+      </div>
+      <script>
+        window.onload = function () {
+          const plot = document.querySelector(".plot");
 
-    const input_year = document.getElementById('input_year');
-    const input_month = document.getElementById('input_month');
-    const input_day = document.getElementById('input_day');
+          function draw(age_in_weeks) {
+            plot.innerHTML = "";
+            let week_counter = 0;
+            for (let year = 1; year < 72; year++) {
+              const row = document.createElement("div");
+              row.className = "row";
 
-    input_year.value = null;
-    input_month.value = null;
-    input_day.value = null;
+              for (let tenth_number = 1; tenth_number < 14; tenth_number++) {
+                const tenth = document.createElement("div");
+                tenth.className = "tenth";
 
-    const date = {
-        year: input_year.value,
-        month: input_month.value,
-        date: input_day.value,
-    }
+                for (let week_number = 1; week_number < 5; week_number++) {
+                  week_counter++;
+                  const week = document.createElement("span");
+                  week.className =
+                    week_counter > age_in_weeks ? "week" : "week passed";
+                  tenth.appendChild(week);
 
-    const btn = document.getElementById('btn');
+                  if (year === 1 && week_counter % 4 === 0) {
+                    const w = document.createElement("div");
+                    w.className = "w";
+                    w.innerHTML = week_counter.toLocaleString("en-US", {
+                      minimumIntegerDigits: 2,
+                      useGrouping: false,
+                    });
 
-    setListeners();
+                    week.appendChild(w);
+                  }
+                }
 
-    function fillOptions() {
-        const currentYear = new Date().getFullYear();
-        for (let i = 0; i < 101; i++) {
-            const option = document.createElement('option');
-            let val = String(currentYear - i);
-            option.innerHTML = val;
-            option.setAttribute('value', val);
-            input_year.appendChild(option);
-        }
+                row.appendChild(tenth);
+              }
 
-        for (let i = 1; i < 13; i++) {
-            const option = document.createElement('option');
-            let val = String(i);
-            option.innerHTML = val;
-            option.setAttribute('value', val);
-            input_month.appendChild(option);
-        }
-        for (let i = 1; i < 32; i++) {
-            const option = document.createElement('option');
-            let val = String(i);
-            option.innerHTML = val;
-            option.setAttribute('value', val);
-            input_day.appendChild(option);
-        }
-    }
+              plot.appendChild(row);
 
-    fillOptions()
+              const y = document.createElement("div");
+              y.className = "year";
+              y.innerHTML = (year - 1).toLocaleString("en-US", {
+                minimumIntegerDigits: 2,
+                useGrouping: false,
+              });
 
-    function updateBtnVisibility() {
-        let isValid = date.year && date.month && date.day;
-        btn.style.display = isValid ? 'block' : 'none';
-    }
-
-    function getListener(field) {
-        return function (e) {
-            let val = e.target.value;
-            if (!isNaN(val)) {
-                date[field] = parseInt(val);
+              row.appendChild(y);
             }
-            updateBtnVisibility()
-        }
-    }
+          }
 
-    function setListeners() {
-        input_year.onchange = getListener('year');
-        input_month.onchange = getListener('month');
-        input_day.onchange = getListener('day');
+          let birthDate = getBirthDate();
 
-        btn.addEventListener('click', function () {
+          const modalWrapper = document.querySelector(".date-picker-modal");
+          const modal = document.querySelector(".date-picker-modal .modal");
+          const button = document.querySelector(".date-picker-modal button");
+          const datePicker = document.querySelector(".date-picker-modal input");
+          const btnCancel = document.querySelector(".btn-cancel");
+          if (!birthDate) btnCancel.classList.add("hidden");
+          const birthDateFooterValue =
+            document.querySelector(".birthdate-value");
+
+          const btnChange = document.querySelector(".btn-change-bd");
+
+          const showModal = () => {
+            modalWrapper.classList.remove("hidden");
+            if (birthDate) btnCancel.classList.remove("hidden");
+          };
+
+          const hideModal = () => {
+            modalWrapper.classList.add("hidden");
+          };
+          btnChange.addEventListener("click", () => {
+            showModal();
+          });
+          btnCancel.addEventListener("click", () => {
+            hideModal();
+          });
+
+          const onDraw = () => {
+            console.log("ondraw");
+            if (!birthDate) return;
             const today = moment();
-            const birthday = moment(`${date.year}-${date.month}-${date.day}`, 'YYYY-M-D');
-            const weeks = today.diff(birthday, 'weeks');
+            const mBirthday = moment(birthDate);
+            const weeks = today.diff(mBirthday, "weeks");
+            birthDateFooterValue.innerHTML = mBirthday.format("DD-MM-YYYY");
+            draw(weeks);
+          };
 
-            let path = `${location.pathname.replaceAll('index.html', '')}`;
-            const url = `${location.protocol}//${location.host}${path}weeks?weeks=${weeks}`;
+          //init listeners
+          datePicker.addEventListener("change", (e) => {
+            console.log("changed:", e.target.value);
+            birthDate = e.target.value;
+            localStorage.setItem("birthdate", birthDate);
+          });
 
-            location.href = url;
-        });
-    }
+          button.addEventListener("click", () => {
+            if (!birthDate) return alert("you must select your birthdate!");
+            let path = `${location.pathname.replaceAll("index.html", "")}`;
+            const url = `${location.protocol}//${location.host}${path}?birthdate=${birthDate}`;
+            if (location.href !== url) {
+              location.href = url;
+            } else {
+              hideModal();
+              onDraw();
+            }
+          });
+          if (!birthDate) {
+            //show modal
+            showModal();
+          } else {
+            //calculate age in weeks and draw
+            datePicker.value = birthDate;
+            onDraw();
+          }
+        };
 
-    updateBtnVisibility();
-</script>
-</body>
+        function getBirthDate() {
+          const urlSearchParams = new URLSearchParams(window.location.search);
+          const params = Object.fromEntries(urlSearchParams.entries());
+          if (params.birthdate) return params.birthdate;
+          return localStorage.getItem("birthdate");
+        }
+      </script>
+    </div>
+  </body>
 </html>

@@ -1,100 +1,162 @@
-*,*::after,*::before{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-
-body{
-
+body {
 }
 
-
-.container{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    margin:0 auto;
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
 }
 
-.header{
-    text-align: center;
-    text-transform: uppercase;
-    padding: 1rem 0;
-    font-family: "San Francisco Display";
-    letter-spacing: 18px;
-    font-weight: 700;
-    font-size: 4rem;
-    margin-bottom: 20px;
-
+.header {
+  text-align: center;
+  text-transform: uppercase;
+  padding: 1rem 0;
+  font-family: "San Francisco Display";
+  letter-spacing: 18px;
+  font-weight: 700;
+  font-size: 4rem;
+  margin-bottom: 20px;
 }
 
-.footer{
-    text-align: center;
-    font-family: "San Francisco Text";
-    font-size: 18px;
-    padding: 2rem 0;
-    text-transform: uppercase;
+.footer {
+  text-align: center;
+  font-family: "San Francisco Text";
+  font-size: 18px;
+  padding: 2rem 0;
+  text-transform: uppercase;
+  width: 100%;
 }
 
-.plot{
-
+.footer .birthdate {
+  opacity: 0;
+  transition: opacity ease 240ms;
+}
+.footer:hover .birthdate {
+  opacity: 1;
 }
 
-.row{
-    position: relative;
-    display: flex;
-    justify-content: center;
-
+.footer .birthdate button {
+  padding: 0.25rem 0.5rem;
+  font-size: 1.5rem;
+  margin: 0.5rem;
+  text-transform: uppercase;
 }
 
-.row .year{
-    position: absolute;
-    left: -16px;
-    display: none;
-    font-family: Ubuntu;
+.plot {
 }
 
-.row:nth-child(10n + 12){
-    margin-top: 4px;
+.row {
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
-.row:nth-child(5n+1) .year{
-    display: block;
-}
-.row:first-child .year{
-    display: none;
-}
-
-.tenth{
-    display: flex;
-    margin: 0 2px;
+.row .year {
+  position: absolute;
+  left: -16px;
+  display: none;
+  font-family: Ubuntu;
 }
 
-.week{
-    width: 12px;
-    height: 12px;
-    border: 2px solid rgba(0,0,0,.3);
-    margin: 3px;
-    border-radius: 3px;
-
-    position: relative;
+.row:nth-child(10n + 12) {
+  margin-top: 4px;
 }
 
-.w{
-    position: absolute;
-    top: -26px;
-    left: -5px;
-    font-size: 16px;
-    font-family: Ubuntu;
+.row:nth-child(5n + 1) .year {
+  display: block;
+}
+.row:first-child .year {
+  display: none;
 }
 
-
-.w,.year{
-    opacity: .4;
+.tenth {
+  display: flex;
+  margin: 0 2px;
 }
 
-.passed{
-    background: rgba(0,0,0,.7);
+.week {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  margin: 3px;
+  border-radius: 3px;
+
+  position: relative;
+}
+
+.w {
+  position: absolute;
+  top: -26px;
+  left: -5px;
+  font-size: 16px;
+  font-family: Ubuntu;
+}
+
+.w,
+.year {
+  opacity: 0.4;
+}
+
+.passed {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.date-picker-modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: start;
+
+  box-shadow: -1px 1px 16px 1px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: -1px 1px 16px 1px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: -1px 1px 16px 1px rgba(0, 0, 0, 0.25);
+}
+
+.modal .modal-head {
+  font-size: 1rem;
+}
+
+.modal .date-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.modal button {
+  margin-left: auto;
+  padding: 0.25rem 0.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.hidden {
+  display: none;
 }
