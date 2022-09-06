@@ -16,5 +16,5 @@ Life Calendar visualizes your life in weeks which helps your stop procrastinatio
 
 ##### Todos
 
-- [ ] add support for mobile
+- [x] add support for mobile
 - [ ] refactor script

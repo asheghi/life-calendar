@@ -152,6 +152,18 @@
           }
         };
 
+        const getScale = () => {
+          const width = window.innerWidth;
+          const scale = Math.min(1, width / 1920 + 0.15);
+          return parseFloat(scale).toFixed(2);
+        };
+
+        document.documentElement.style.setProperty("--vw-scale", getScale());
+
+        window.addEventListener("resize", () => {
+          document.documentElement.style.setProperty("--vw-scale", getScale());
+        });
+
         function getBirthDate() {
           const urlSearchParams = new URLSearchParams(window.location.search);
           const params = Object.fromEntries(urlSearchParams.entries());

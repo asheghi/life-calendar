@@ -7,6 +7,8 @@
 }
 
 body {
+  transform: scale(var(--vw-scale));
+  transform-origin: top;
 }
 
 .container {
@@ -25,6 +27,7 @@ body {
   letter-spacing: 18px;
   font-weight: 700;
   font-size: 4rem;
+  white-space: nowrap;
   margin-bottom: 20px;
 }
 
