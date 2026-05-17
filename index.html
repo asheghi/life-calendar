@@ -2,175 +2,107 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Life Calendar</title>
     <link rel="stylesheet" href="./style.css" />
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
-      integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
+    <script>
+      (function () {
+        var saved = localStorage.getItem('theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
   </head>
   <body>
-    <div class="container">
-      <div class="header">weeks of my life</div>
-      <div class="plot"></div>
-      <div class="footer">
-        <h4>you only live once</h4>
-        <div class="birthdate">
-          <p>birthdate: <span class="birthdate-value"></span></p>
-          <button class="btn-change-bd">change</button>
-        </div>
+
+    <!-- Fixed overlays — must be OUTSIDE the scaled wrapper -->
+
+    <!-- Onboarding -->
+    <div id="onboarding" class="onboarding">
+      <div id="ob-step1" class="ob-step ob-step--active">
+        <h1 class="ob-heading">When were you born?</h1>
+        <input id="ob-birthdate" type="date" class="ob-date-input" />
+        <button id="ob-next" class="ob-btn">Next →</button>
       </div>
-
-      <div class="date-picker-modal hidden test">
-        <div class="modal">
-          <h2 class="modal-head">Enter your birthdate</h2>
-          <div class="date-row">
-            <input type="date" />
-            <button>Set</button>
-          </div>
-          <button class="btn-cancel">cancel</button>
+      <div id="ob-step2" class="ob-step ob-step--hidden">
+        <h1 class="ob-heading">How long do you plan to live?</h1>
+        <div class="ob-life-row">
+          <input id="ob-life-input" type="number" min="50" max="110" value="80" class="ob-life-num" />
+          <span class="ob-life-unit">years</span>
         </div>
+        <input id="ob-life-slider" type="range" min="50" max="110" value="80" class="ob-slider" />
+        <button id="ob-start" class="ob-btn">Start</button>
       </div>
-      <script>
-        window.onload = function () {
-          const plot = document.querySelector(".plot");
-
-          function draw(age_in_weeks) {
-            plot.innerHTML = "";
-            let week_counter = 0;
-            for (let year = 1; year < 72; year++) {
-              const row = document.createElement("div");
-              row.className = "row";
-
-              for (let tenth_number = 1; tenth_number < 14; tenth_number++) {
-                const tenth = document.createElement("div");
-                tenth.className = "tenth";
-
-                for (let week_number = 1; week_number < 5; week_number++) {
-                  week_counter++;
-                  const week = document.createElement("span");
-                  week.className =
-                    week_counter > age_in_weeks ? "week" : "week passed";
-                  tenth.appendChild(week);
-
-                  if (year === 1 && week_counter % 4 === 0) {
-                    const w = document.createElement("div");
-                    w.className = "w";
-                    w.innerHTML = week_counter.toLocaleString("en-US", {
-                      minimumIntegerDigits: 2,
-                      useGrouping: false,
-                    });
-
-                    week.appendChild(w);
-                  }
-                }
-
-                row.appendChild(tenth);
-              }
-
-              plot.appendChild(row);
-
-              const y = document.createElement("div");
-              y.className = "year";
-              y.innerHTML = (year - 1).toLocaleString("en-US", {
-                minimumIntegerDigits: 2,
-                useGrouping: false,
-              });
-
-              row.appendChild(y);
-            }
-          }
-
-          let birthDate = getBirthDate();
-
-          const modalWrapper = document.querySelector(".date-picker-modal");
-          const modal = document.querySelector(".date-picker-modal .modal");
-          const button = document.querySelector(".date-picker-modal button");
-          const datePicker = document.querySelector(".date-picker-modal input");
-          const btnCancel = document.querySelector(".btn-cancel");
-          if (!birthDate) btnCancel.classList.add("hidden");
-          const birthDateFooterValue =
-            document.querySelector(".birthdate-value");
-
-          const btnChange = document.querySelector(".btn-change-bd");
-
-          const showModal = () => {
-            modalWrapper.classList.remove("hidden");
-            if (birthDate) btnCancel.classList.remove("hidden");
-          };
-
-          const hideModal = () => {
-            modalWrapper.classList.add("hidden");
-          };
-          btnChange.addEventListener("click", () => {
-            showModal();
-          });
-          btnCancel.addEventListener("click", () => {
-            hideModal();
-          });
-
-          const onDraw = () => {
-            if (!birthDate) return;
-            const today = moment();
-            const mBirthday = moment(birthDate);
-            const weeks = today.diff(mBirthday, "weeks");
-            birthDateFooterValue.innerHTML = mBirthday.format("DD-MM-YYYY");
-            draw(weeks);
-          };
-
-          //init listeners
-          datePicker.addEventListener("change", (e) => {
-            birthDate = e.target.value;
-            localStorage.setItem("birthdate", birthDate);
-          });
-
-          button.addEventListener("click", () => {
-            if (!birthDate) return alert("you must select your birthdate!");
-            let path = `${location.pathname.replaceAll("index.html", "")}`;
-            const url = `${location.protocol}//${location.host}${path}?birthdate=${birthDate}`;
-            if (location.href !== url) {
-              location.href = url;
-            } else {
-              hideModal();
-              onDraw();
-            }
-          });
-          if (!birthDate) {
-            //show modal
-            showModal();
-          } else {
-            //calculate age in weeks and draw
-            datePicker.value = birthDate;
-            onDraw();
-          }
-        };
-
-        const getScale = () => {
-          const width = window.innerWidth;
-          const scale = Math.min(1, width / 1920 + 0.15);
-          return parseFloat(scale).toFixed(2);
-        };
-
-        document.documentElement.style.setProperty("--vw-scale", getScale());
-
-        window.addEventListener("resize", () => {
-          document.documentElement.style.setProperty("--vw-scale", getScale());
-        });
-
-        function getBirthDate() {
-          const urlSearchParams = new URLSearchParams(window.location.search);
-          const params = Object.fromEntries(urlSearchParams.entries());
-          if (params.birthdate) return params.birthdate;
-          return localStorage.getItem("birthdate");
-        }
-      </script>
+      <div class="ob-dots">
+        <span id="ob-dot1" class="ob-dot ob-dot--active"></span>
+        <span id="ob-dot2" class="ob-dot"></span>
+      </div>
     </div>
+
+    <!-- Settings overlay -->
+    <div id="settings-overlay" class="settings-overlay hidden"></div>
+
+    <!-- Settings panel -->
+    <aside id="settings-panel" class="settings-panel">
+      <button id="sp-close" class="sp-close" aria-label="Close settings">×</button>
+      <h2 class="sp-heading">Settings</h2>
+      <label class="sp-label">
+        Theme
+        <div class="sp-swatches">
+          <button class="swatch" data-theme-value="light"  title="Light"></button>
+          <button class="swatch" data-theme-value="dark"   title="Dark"></button>
+          <button class="swatch" data-theme-value="aurora" title="Aurora"></button>
+          <button class="swatch" data-theme-value="sunset" title="Sunset"></button>
+          <button class="swatch" data-theme-value="ocean"  title="Ocean"></button>
+        </div>
+      </label>
+      <label class="sp-label">
+        Birthdate
+        <input id="sp-birthdate" type="date" class="sp-input" />
+      </label>
+      <label class="sp-label">
+        Life expectancy
+        <div class="sp-life-row">
+          <input id="sp-life-input" type="number" min="50" max="110" value="80" class="sp-life-num" />
+          <span class="sp-life-unit">years</span>
+        </div>
+        <input id="sp-life-slider" type="range" min="50" max="110" value="80" class="sp-slider" />
+      </label>
+      <a id="sp-reset" href="#" class="sp-reset">Reset &amp; start over</a>
+    </aside>
+
+    <!-- Scale wrapper — transform lives here, not on body -->
+    <div class="scale-wrapper">
+      <div class="container">
+        <div class="header-row">
+          <div class="header">weeks of my life</div>
+          <div class="header-actions">
+            <button id="theme-btn" class="icon-btn" aria-label="Cycle theme">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="13.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="17.5" cy="10.5" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="8.5"  cy="7.5"  r="1" fill="currentColor" stroke="none"/>
+                <circle cx="6.5"  cy="12.5" r="1" fill="currentColor" stroke="none"/>
+                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+              </svg>
+            </button>
+            <button id="gear-btn" class="icon-btn" aria-label="Open settings">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div id="stats" class="stats"></div>
+        <div class="plot"></div>
+        <div class="footer">
+          <h4>you only live once</h4>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./js/main.js"></script>
   </body>
 </html>
