@@ -38,5 +38,7 @@ export function saveSettings({ birthdate, lifeExpectancy }) {
 export function clearSettings() {
   localStorage.removeItem('birthdate');
   localStorage.removeItem('lifeExpectancy');
+  localStorage.removeItem('backgroundUrl');
+  localStorage.removeItem('theme');
   history.replaceState(null, '', window.location.pathname);
 }

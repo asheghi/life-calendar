@@ -31,7 +31,7 @@ window.addEventListener('afterprint', () => {
 });
 
 // ── Theme ────────────────────────────────────────────────
-const THEMES = ['light', 'dark', 'aurora', 'sunset', 'ocean'];
+const THEMES = ['light', 'dark', 'midnight', 'forest', 'ocean'];
 
 function setTheme(name) {
   document.documentElement.setAttribute('data-theme', name);
@@ -52,6 +52,34 @@ document.getElementById('theme-btn').addEventListener('click', () => {
 document.querySelectorAll('.swatch').forEach(s =>
   s.addEventListener('click', () => setTheme(s.dataset.themeValue))
 );
+
+// ── Background image ──────────────────────────────────────
+const bgUrlInput  = document.getElementById('sp-bg-url');
+const bgClearBtn  = document.getElementById('sp-bg-clear');
+
+function applyBgImage(url) {
+  const el = document.documentElement;
+  if (url) {
+    el.style.backgroundImage    = `url(${JSON.stringify(url)})`;
+    el.style.backgroundSize     = 'cover';
+    el.style.backgroundPosition = 'center';
+    el.style.backgroundAttachment = 'fixed';
+    localStorage.setItem('backgroundUrl', url);
+  } else {
+    el.style.backgroundImage    = '';
+    el.style.backgroundSize     = '';
+    el.style.backgroundPosition = '';
+    el.style.backgroundAttachment = '';
+    localStorage.removeItem('backgroundUrl');
+  }
+}
+
+const savedBgUrl = localStorage.getItem('backgroundUrl');
+if (savedBgUrl) { bgUrlInput.value = savedBgUrl; applyBgImage(savedBgUrl); }
+
+bgUrlInput.addEventListener('change', () => applyBgImage(bgUrlInput.value.trim()));
+bgUrlInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') applyBgImage(bgUrlInput.value.trim()); });
+bgClearBtn.addEventListener('click', () => { bgUrlInput.value = ''; applyBgImage(''); });
 
 const scaleWrapper = document.querySelector('.scale-wrapper');
 const applyScale = () => {

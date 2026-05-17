@@ -375,11 +375,30 @@ body {
 .swatch--active {
   box-shadow: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-text);
 }
-.swatch[data-theme-value="light"]  { background: #f0f0f0; border-color: #ccc; }
-.swatch[data-theme-value="dark"]   { background: #1a1a1a; border-color: #444; }
-.swatch[data-theme-value="aurora"] { background: linear-gradient(135deg, #1a0533, #0a2a1f); }
-.swatch[data-theme-value="sunset"] { background: linear-gradient(135deg, #7b1f5e, #f4a34a); }
-.swatch[data-theme-value="ocean"]  { background: linear-gradient(135deg, #020b18, #0a8a9a); }
+.swatch[data-theme-value="light"]    { background: #f0f0f0; border-color: #ccc; }
+.swatch[data-theme-value="dark"]     { background: #1a1a1a; border-color: #444; }
+.swatch[data-theme-value="midnight"] { background: linear-gradient(135deg, #06091a, #0f1535); }
+.swatch[data-theme-value="forest"]   { background: linear-gradient(135deg, #030e07, #0a2010); }
+.swatch[data-theme-value="ocean"]    { background: linear-gradient(135deg, #020b18, #0a8a9a); }
+
+.sp-bg-row {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+.sp-bg-row .sp-input { flex: 1; font-size: 0.85rem; padding: 0.5rem 0.75rem; }
+.sp-bg-clear {
+  flex-shrink: 0;
+  background: none;
+  border: 2px solid var(--color-input-border);
+  border-radius: 8px;
+  color: var(--color-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.4rem 0.55rem;
+  transition: color 150ms, border-color 150ms;
+}
+.sp-bg-clear:hover { color: var(--color-text); border-color: var(--color-text); }
 
 .sp-reset {
   margin-top: auto;
@@ -405,32 +424,32 @@ body {
   --color-input-text: #f0f0f0;
 }
 
-[data-theme="aurora"] {
-  --color-bg: linear-gradient(160deg, #0d0221 0%, #1a0533 35%, #0a2a1f 70%, #041a0f 100%);
-  --color-surface: rgba(15, 5, 30, 0.95);
-  --color-text: #e8d5ff;
-  --color-cell-border: rgba(160, 80, 255, 0.3);
-  --color-cell-passed: rgba(100, 255, 170, 0.75);
-  --color-cell-current: #7fffcf;
-  --color-muted: rgba(200, 150, 255, 0.55);
-  --color-accent: #7fffcf;
-  --color-input-bg: rgba(255, 255, 255, 0.07);
-  --color-input-border: rgba(160, 80, 255, 0.3);
-  --color-input-text: #e8d5ff;
+[data-theme="midnight"] {
+  --color-bg: linear-gradient(160deg, #06091a 0%, #0f1535 45%, #080e28 100%);
+  --color-surface: rgba(8, 11, 30, 0.96);
+  --color-text: #bfceff;
+  --color-cell-border: rgba(100, 130, 255, 0.28);
+  --color-cell-passed: rgba(110, 145, 255, 0.8);
+  --color-cell-current: #8fa8ff;
+  --color-muted: rgba(140, 165, 255, 0.5);
+  --color-accent: #8fa8ff;
+  --color-input-bg: rgba(255, 255, 255, 0.06);
+  --color-input-border: rgba(100, 130, 255, 0.25);
+  --color-input-text: #bfceff;
 }
 
-[data-theme="sunset"] {
-  --color-bg: linear-gradient(160deg, #1a0a2e 0%, #7b1f5e 35%, #c4432a 70%, #f4a34a 100%);
-  --color-surface: rgba(30, 8, 25, 0.95);
-  --color-text: #ffe8d5;
-  --color-cell-border: rgba(255, 160, 80, 0.3);
-  --color-cell-passed: rgba(255, 160, 80, 0.78);
-  --color-cell-current: #ffd080;
-  --color-muted: rgba(255, 190, 130, 0.55);
-  --color-accent: #ffd080;
-  --color-input-bg: rgba(255, 255, 255, 0.07);
-  --color-input-border: rgba(255, 160, 80, 0.3);
-  --color-input-text: #ffe8d5;
+[data-theme="forest"] {
+  --color-bg: linear-gradient(160deg, #030e07 0%, #0a2010 45%, #051208 100%);
+  --color-surface: rgba(4, 14, 8, 0.96);
+  --color-text: #a8e8b8;
+  --color-cell-border: rgba(60, 185, 85, 0.28);
+  --color-cell-passed: rgba(70, 205, 100, 0.78);
+  --color-cell-current: #5ee87a;
+  --color-muted: rgba(100, 205, 125, 0.5);
+  --color-accent: #5ee87a;
+  --color-input-bg: rgba(255, 255, 255, 0.06);
+  --color-input-border: rgba(60, 185, 85, 0.25);
+  --color-input-text: #a8e8b8;
 }
 
 [data-theme="ocean"] {
